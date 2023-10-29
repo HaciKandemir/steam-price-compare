@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@nuxt/ui-edge": "2.9.0-28308482.f5f3388",
+    "@vercel/analytics": "^1.1.1",
     "vite": "^4.5.0",
     "webpack": "^5.89.0"
   }
