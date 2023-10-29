@@ -12,6 +12,17 @@ export default defineEventHandler((event) => {
     const gameList = JSON.parse(fileData);
 
     let sortedGames = Object.values(gameList);
+
+    if (query.tlMin && typeof query.tlMin == 'string') {
+        const min = parseFloat(query.tlMin)?.toFixed(2).split('.').join('')
+        sortedGames = sortedGames.filter((game) => game.price.TR.final >= min )
+    }
+
+    if (query.tlMax && typeof query.tlMax == 'string') {
+        const max = parseFloat(query.tlMax)?.toFixed(2).split('.').join('')
+        sortedGames = sortedGames.filter((game) => game.price.TR.final <= max )
+    }
+
     if (orderBy) {
         sortedGames = sortedGames.sort((a, b) => {
             let sortA = a[orderBy];
@@ -40,5 +51,5 @@ export default defineEventHandler((event) => {
     const endIndex = startIndex + pageSize;
     const gamesForPage = Object.values(sortedGames).slice(startIndex, endIndex);
 
-    return { data: gamesForPage, totalGames: Object.keys(sortedGames).length};
+    return { data: gamesForPage, totalGames: Object.keys(sortedGames).length };
 })

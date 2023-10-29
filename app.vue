@@ -29,6 +29,10 @@ const columns = [
     key: 'price.AZ.final',
     label: 'CIS-(USD)',
     sortable: true,
+  },
+  {
+    key: 'steam',
+    label: ''
   }
 ]
 const games = ref([])
@@ -39,6 +43,8 @@ const queryParams = ref({
   perPage: 10,
   sortColumn: 'id',
   sortDirection: 'desc' as 'desc' | 'asc',
+  tlMin: undefined as number | undefined,
+  tlMax: undefined as number | undefined,
 })
 
 const tableSortParams = computed(() => {
@@ -83,18 +89,18 @@ watch(
     <div class="flex flex-col max-w-[1280px] mx-auto gap-4">
       <div class="flex items-center justify-between gap-3  py-3">
         <UFormGroup label="Game Name">
-          <UInput placeholder="name" icon="i-heroicons-magnifying-glass-20-solid" />
+          <UInput placeholder="name" icon="i-heroicons-magnifying-glass-20-solid" disabled />
         </UFormGroup>
 
         <div class="flex gap-3 text-center items-center">
           <UFormGroup label="TR" >
             <div class="flex gap-3">
-              <UInput placeholder="min price" icon="i-heroicons-currency-yen" type="number" />
+              <UInput placeholder="min price" icon="i-heroicons-currency-yen" type="number" v-model="queryParams.tlMin" step=".01"/>
               -
-              <UInput placeholder="max price" icon="i-heroicons-currency-yen" type="number" />
+              <UInput placeholder="max price" icon="i-heroicons-currency-yen" type="number" v-model="queryParams.tlMax"/>
             </div>
           </UFormGroup>
-          <UFormGroup label="CIS - U.S. Dollar">
+          <UFormGroup label="CIS - U.S. Dollar" v-show="false">
             <div class="flex gap-3">
               <UInput placeholder="min price" icon="i-heroicons-currency-yen" type="number" />
               -
@@ -107,11 +113,30 @@ watch(
         <template #avatar-data="{ row }">
           <img :src="`https://cdn.akamai.steamstatic.com/steam/apps/${row.id}/header.jpg`" width="200" class="mx-auto" />
         </template>
+
+        <template #name-data="{ row }">
+          <NuxtLink :to="`https://store.steampowered.com/app/${row.id}`" target="_blank">
+            {{ row.name }}
+          </NuxtLink>
+        </template>
+
         <template #price.TR.final-data="{ row }">
           <span>{{ row.price.TR.final_formatted }}</span>
         </template>
         <template #price.AZ.final-data="{ row }">
           <span>{{ row.price.AZ.final_formatted }}</span>
+        </template>
+
+        <template #steam-data="{ row }">
+          <NuxtLink :to="`https://store.steampowered.com/app/${row.id}`" target="_blank">
+            <UButton
+              icon="i-heroicons-link-solid"
+              size="sm"
+              color="gray"
+              square
+              variant="solid"
+            />
+          </NuxtLink>
         </template>
       </UTable>
 
