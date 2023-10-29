@@ -1,10 +1,10 @@
 <script setup lang="ts">
 
 useHead({
-  title: 'Steam - App'
+  title: 'Steam Price Compare - H.K.'
 })
 
-//const gameList = await useFetch('/api/command');
+//const gameList = await useFetch('/api/calculate');
 
 const columns = [
   {
@@ -22,7 +22,12 @@ const columns = [
   },
   {
     key: 'price.TR.final',
-    label: 'TR',
+    label: 'TL',
+    sortable: true,
+  },
+  {
+    key: 'discount',
+    label: 'Difference',
     sortable: true,
   },
   {
@@ -69,10 +74,21 @@ onBeforeMount(async()=> {
 })
 
 const updateSort = (data : {column: string, direction: 'asc'|'desc' }) => {
-  console.log('data: ',data)
   queryParams.value.sortColumn = data.column
   queryParams.value.sortDirection = data.direction
 }
+
+// eg: 45875 => 458,75
+const formatCurrency = (value) => {
+  if (typeof value === 'number') {
+    return (value / 100).toLocaleString('tr-TR', {
+      style: 'currency',
+      currency: 'TRY',
+      minimumFractionDigits: 2,
+    });
+  }
+  return value;
+};
 
 watch(
   () => queryParams.value,
@@ -93,7 +109,7 @@ watch(
         </UFormGroup>
 
         <div class="flex gap-3 text-center items-center">
-          <UFormGroup label="TR" >
+          <UFormGroup label="TL" >
             <div class="flex gap-3">
               <UInput placeholder="min price" icon="i-heroicons-currency-yen" type="number" v-model="queryParams.tlMin" step=".01"/>
               -
@@ -123,8 +139,19 @@ watch(
         <template #price.TR.final-data="{ row }">
           <span>{{ row.price.TR.final_formatted }}</span>
         </template>
+
+        <template #discount-data="{ row }">
+          <div class="flex flex-col items-center" :class="{ 'text-primary-500': row.tr_currency_discount < 0, 'text-red-500': row.tr_currency_discount > 0 }">
+            <span><span v-if="row.tr_currency_discount > 0">+</span>{{ formatCurrency(row.tr_currency_discount) }}</span>
+            <span>% {{ row.tr_currency_discount_percent.toFixed(2).replace('-','') }}</span>
+          </div>
+        </template>
+
         <template #price.AZ.final-data="{ row }">
-          <span>{{ row.price.AZ.final_formatted }}</span>
+          <div class="flex flex-col">
+            <span>{{ row.price.AZ.final_formatted }}</span>
+            <span>{{ formatCurrency(row.price.AZ.final*28.2) }}</span>
+          </div>
         </template>
 
         <template #steam-data="{ row }">

@@ -7,7 +7,7 @@ export default defineEventHandler((event) => {
     const orderBy = query.sortColumn;
     const orderDirection = query.sortDirection;
 
-    const filePath = process.cwd() + '/public/game_list.json';
+    const filePath = process.cwd() + '/public/game_list_v2.json';
     const fileData = fs.readFileSync(filePath, 'utf-8');
     const gameList = JSON.parse(fileData);
 
@@ -36,6 +36,10 @@ export default defineEventHandler((event) => {
                 case 'price.AZ.final':
                     sortA = a.price.AZ.final;
                     sortB = b.price.AZ.final;
+                    break;
+                case 'discount':
+                    sortA = a.tr_currency_discount;
+                    sortB = b.tr_currency_discount;
                     break;
             }
 
