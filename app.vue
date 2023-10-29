@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 useHead({
-  title: 'Steam Price Compare - H.K.'
+  title: 'Steam Price Compare - V2'
 })
 
 //const gameList = await useFetch('/api/calculate');
