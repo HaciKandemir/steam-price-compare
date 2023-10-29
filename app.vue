@@ -1,0 +1,134 @@
+<script setup lang="ts">
+
+useHead({
+  title: 'Steam - App'
+})
+
+//const gameList = await useFetch('/api/command');
+
+const columns = [
+  {
+    key: 'id',
+    label: 'AppId',
+    sortable: true,
+  },
+  {
+    key: 'avatar',
+    label: '',
+  },
+  {
+    key: 'name',
+    label: 'Name'
+  },
+  {
+    key: 'price.TR.final',
+    label: 'TR',
+    sortable: true,
+  },
+  {
+    key: 'price.AZ.final',
+    label: 'CIS-(USD)',
+    sortable: true,
+  }
+]
+const games = ref([])
+const totalGames = ref(0)
+const loading = ref(false)
+const queryParams = ref({
+  page: 1,
+  perPage: 10,
+  sortColumn: 'id',
+  sortDirection: 'desc' as 'desc' | 'asc',
+})
+
+const tableSortParams = computed(() => {
+  return {
+    column: queryParams.value.sortColumn,
+    direction: queryParams.value.sortDirection,
+  }
+})
+
+const fetchGame = async() => {
+  loading.value = true
+  await $fetch('/api/game', { params: {...queryParams.value} })
+  .then((data) => {
+    totalGames.value = data.totalGames
+    games.value = data.data
+  })
+  .finally(()=> loading.value = false)
+}
+
+onBeforeMount(async()=> {
+  await fetchGame()
+})
+
+const updateSort = (data : {column: string, direction: 'asc'|'desc' }) => {
+  console.log('data: ',data)
+  queryParams.value.sortColumn = data.column
+  queryParams.value.sortDirection = data.direction
+}
+
+watch(
+  () => queryParams.value,
+  () => {
+    fetchGame()
+  },
+  { deep: true}
+)
+
+</script>
+
+<template>
+  <div>
+    <div class="flex flex-col max-w-[1280px] mx-auto gap-4">
+      <div class="flex items-center justify-between gap-3  py-3">
+        <UFormGroup label="Game Name">
+          <UInput placeholder="name" icon="i-heroicons-magnifying-glass-20-solid" />
+        </UFormGroup>
+
+        <div class="flex gap-3 text-center items-center">
+          <UFormGroup label="TR" >
+            <div class="flex gap-3">
+              <UInput placeholder="min price" icon="i-heroicons-currency-yen" type="number" />
+              -
+              <UInput placeholder="max price" icon="i-heroicons-currency-yen" type="number" />
+            </div>
+          </UFormGroup>
+          <UFormGroup label="CIS - U.S. Dollar">
+            <div class="flex gap-3">
+              <UInput placeholder="min price" icon="i-heroicons-currency-yen" type="number" />
+              -
+              <UInput placeholder="max price" icon="i-heroicons-currency-yen" type="number" />
+            </div>
+          </UFormGroup>
+        </div>
+      </div>
+      <UTable :loading="loading" :columns="columns" :rows="games" :sort="tableSortParams" @update:sort="updateSort" class="min-h-[600px] max-h-screen">
+        <template #avatar-data="{ row }">
+          <img :src="`https://cdn.akamai.steamstatic.com/steam/apps/${row.id}/header.jpg`" width="200" class="mx-auto" />
+        </template>
+        <template #price.TR.final-data="{ row }">
+          <span>{{ row.price.TR.final_formatted }}</span>
+        </template>
+        <template #price.AZ.final-data="{ row }">
+          <span>{{ row.price.AZ.final_formatted }}</span>
+        </template>
+      </UTable>
+
+      <div class="flex justify-between">
+        <div class="flex items-center gap-1.5">
+          <span class="text-sm leading-5">Rows per page:</span>
+          <USelect
+            v-model="queryParams.perPage"
+            :options="[5, 10, 15, 20, 30, 40, 50]"
+            class="me-2 w-20"
+          />
+        </div>
+
+        <UPagination v-model="queryParams.page" :page-count="queryParams.perPage" :total="totalGames" />
+      </div>
+    </div>
+  </div>
+</template>
+
+<style></style>
