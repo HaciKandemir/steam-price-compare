@@ -127,11 +127,11 @@ watch(
       </div>
       <UTable :loading="loading" :columns="columns" :rows="games" :sort="tableSortParams" @update:sort="updateSort" class="min-h-[600px] max-h-screen">
         <template #avatar-data="{ row }">
-          <img :src="`https://cdn.akamai.steamstatic.com/steam/apps/${row.id}/header.jpg`" width="200" class="mx-auto" />
+          <img :src="`https://cdn.akamai.steamstatic.com/steam/apps/${row.id}/header.jpg`" width="200" class="mx-auto min-w-[5rem]" />
         </template>
 
         <template #name-data="{ row }">
-          <NuxtLink :to="`https://store.steampowered.com/app/${row.id}`" target="_blank">
+          <NuxtLink :to="`https://store.steampowered.com/app/${row.id}`" target="_blank" class="whitespace-break-spaces">
             {{ row.name }}
           </NuxtLink>
         </template>
@@ -177,7 +177,7 @@ watch(
           />
         </div>
 
-        <UPagination v-model="queryParams.page" :page-count="queryParams.perPage" :total="totalGames" />
+        <UPagination v-model="queryParams.page" :page-count="queryParams.perPage" :total="totalGames" :max="15" />
       </div>
     </div>
   </div>
