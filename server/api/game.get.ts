@@ -1,5 +1,4 @@
 import fs from 'fs'
-import path from 'path';
 
 export default defineEventHandler((event) => {
     const query = getQuery(event);
@@ -8,7 +7,7 @@ export default defineEventHandler((event) => {
     const orderBy = query.sortColumn;
     const orderDirection = query.sortDirection;
 
-    const filePath = path.resolve(process.cwd(), 'game_list.json');
+    const filePath = process.cwd() + '/game_list.json';
     const fileData = fs.readFileSync(filePath, 'utf-8');
     const gameList = JSON.parse(fileData);
 
