@@ -8,7 +8,7 @@ export default defineEventHandler((event) => {
     const orderBy = query.sortColumn;
     const orderDirection = query.sortDirection;
 
-    const filePath = 'public/game_list_v2.json';
+    const filePath = 'tmp/public/game_list_v2.json';
     const fileData = fs.readFileSync(filePath, 'utf-8');
     const gameList = JSON.parse(fileData);
 
