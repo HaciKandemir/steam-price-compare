@@ -1,16 +1,18 @@
 import fs from 'fs'
 import path from 'path';
 
-export default defineEventHandler((event) => {
+export default defineEventHandler(async(event) => {
     const query = getQuery(event);
     const page = typeof query.page == 'string' && parseInt(query.page) || 1;
     const pageSize = typeof query.perPage == 'string' && parseInt(query.perPage) || 10;
     const orderBy = query.sortColumn;
     const orderDirection = query.sortDirection;
 
-    const filePath = path.join("/tmp", "game_list_v2.json");
-    const fileData = fs.readFileSync(filePath, 'utf-8');
-    const gameList = JSON.parse(fileData);
+    //const filePath = path.join("/tmp", "game_list_v2.json");
+    //const fileData = fs.readFileSync(filePath, 'utf-8');
+    //const gameList = JSON.parse(fileData);
+
+    const gameList = await $fetch('https://steam.haci.dev/game_list_v2.json')
 
     let sortedGames = Object.values(gameList);
 
