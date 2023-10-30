@@ -50,6 +50,7 @@ const queryParams = ref({
   sortDirection: 'desc' as 'desc' | 'asc',
   tlMin: undefined as number | undefined,
   tlMax: undefined as number | undefined,
+  name: undefined as string | undefined,
 })
 
 const tableSortParams = computed(() => {
@@ -90,10 +91,12 @@ const formatCurrency = (value) => {
   return value;
 };
 
+const fetchSlow = _debounce(() => fetchGame(), 500)
+
 watch(
   () => queryParams.value,
   () => {
-    fetchGame()
+    fetchSlow()
   },
   { deep: true}
 )
@@ -105,7 +108,7 @@ watch(
     <div class="flex flex-col max-w-[1280px] mx-auto gap-4">
       <div class="flex items-center justify-between gap-3  py-3">
         <UFormGroup label="Game Name">
-          <UInput placeholder="name" icon="i-heroicons-magnifying-glass-20-solid" disabled />
+          <UInput placeholder="name" icon="i-heroicons-magnifying-glass-20-solid" v-model="queryParams.name" />
         </UFormGroup>
 
         <div class="flex gap-3 text-center items-center">
@@ -143,7 +146,7 @@ watch(
         <template #discount-data="{ row }">
           <div class="flex flex-col items-center" :class="{ 'text-primary-500': row.tr_currency_discount < 0, 'text-red-500': row.tr_currency_discount > 0 }">
             <span><span v-if="row.tr_currency_discount > 0">+</span>{{ formatCurrency(row.tr_currency_discount) }}</span>
-            <span>% {{ row.tr_currency_discount_percent.toFixed(2).replace('-','') }}</span>
+            <span>% {{ row.tr_currency_discount_percent?.toFixed(2).replace('-','') }}</span>
           </div>
         </template>
 
