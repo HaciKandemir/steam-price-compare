@@ -109,13 +109,13 @@ watch(
 
 <template>
   <div>
-    <div class="flex flex-col max-w-[1280px] mx-auto gap-4">
-      <div class="flex items-center justify-between gap-3  py-3">
+    <div class="flex flex-col max-w-[1280px] mx-auto pb-4 gap-4">
+      <div class="flex items-center justify-between gap-3 py-3">
         <UFormGroup label="Game Name">
           <UInput placeholder="name" icon="i-heroicons-magnifying-glass-20-solid" v-model="queryParams.name" @input="resetPage"/>
         </UFormGroup>
 
-        <div class="flex gap-3 text-center items-center">
+        <div class="flex flex-col gap-3 text-center items-center">
           <UFormGroup label="TL" >
             <div class="flex gap-3">
               <UInput placeholder="min price" icon="i-heroicons-currency-yen" type="number" v-model="queryParams.tlMin" step=".01" @input="resetPage"/>
@@ -185,6 +185,11 @@ watch(
         </div>
 
         <UPagination v-model="queryParams.page" :page-count="queryParams.perPage" :total="totalGames" :max="15" />
+      </div>
+
+      <div class="flex flex-col text-zinc-400">
+        <small> Oyunların fiyatları 28/10/2023 tarihindeki verileri baz almaktadır.</small>
+        <small> Dolar kuru 28,2tl olarak baz alınmıştır.</small>
       </div>
     </div>
   </div>
