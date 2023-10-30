@@ -51,6 +51,7 @@ const queryParams = ref({
   tlMin: undefined as number | undefined,
   tlMax: undefined as number | undefined,
   name: undefined as string | undefined,
+  discount: false,
 })
 
 const tableSortParams = computed(() => {
@@ -110,10 +111,12 @@ watch(
 <template>
   <div>
     <div class="flex flex-col max-w-[1280px] mx-auto pb-4 gap-4">
-      <div class="flex items-center justify-between gap-3 py-3">
+      <div class="flex flex-col items-center justify-between gap-3 py-3 md:flex-row">
         <UFormGroup label="Game Name">
           <UInput placeholder="name" icon="i-heroicons-magnifying-glass-20-solid" v-model="queryParams.name" @input="resetPage"/>
         </UFormGroup>
+
+        <UCheckbox v-model="queryParams.discount" label="Special Offers" @change="resetPage" />
 
         <div class="flex flex-col gap-3 text-center items-center">
           <UFormGroup label="TL" >

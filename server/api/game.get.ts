@@ -26,6 +26,10 @@ export default defineEventHandler(async(event) => {
         sortedGames = sortedGames.filter((game) => game.price.TR.final <= max )
     }
 
+    if (query.discount) {
+        sortedGames = sortedGames.filter((game) => game.price?.TR?.discount_percent > 0 || game.price?.AZ?.discount_percent > 0)
+    }
+
     if (query.name && typeof query.name == 'string') {
         const nameRegex = new RegExp(query.name.replace(/İ/g, 'i'),'ig'); 
         sortedGames = sortedGames.filter((game) => game.name.search(nameRegex) > -1)
@@ -63,5 +67,5 @@ export default defineEventHandler(async(event) => {
     const endIndex = startIndex + pageSize;
     const gamesForPage = Object.values(sortedGames).slice(startIndex, endIndex);
 
-    return { data: gamesForPage, totalGames: Object.keys(sortedGames).length, name: query.name };
+    return { data: gamesForPage, totalGames: Object.keys(sortedGames).length };
 })
