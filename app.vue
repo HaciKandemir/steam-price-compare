@@ -144,7 +144,10 @@ watch(
         </template>
 
         <template #price.TR.final-data="{ row }">
-          <span>{{ row.price.TR.final_formatted }}</span>
+          <span class="flex flex-col">
+            <small v-if="row.price.TR.discount_percent > 0" class="opacity-50">{{ row.price.TR.initial_formatted }}</small>
+            <span>{{ row.price.TR.final_formatted }}</span>
+          </span>
         </template>
 
         <template #discount-data="{ row }">
@@ -156,6 +159,7 @@ watch(
 
         <template #price.AZ.final-data="{ row }">
           <div class="flex flex-col">
+            <small v-if="row.price.AZ.discount_percent > 0" class="opacity-50">{{ row.price.AZ.initial_formatted }} - {{ formatCurrency(row.price.AZ.initial*28.2) }}</small>
             <span>{{ row.price.AZ.final_formatted }}</span>
             <span>{{ formatCurrency(row.price.AZ.final*28.2) }}</span>
           </div>
