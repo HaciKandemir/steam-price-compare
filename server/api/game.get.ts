@@ -26,7 +26,7 @@ export default defineEventHandler(async(event) => {
         sortedGames = sortedGames.filter((game) => game.price.TR.final <= max )
     }
 
-    if (query.discount) {
+    if (query.discount == 'true') {
         sortedGames = sortedGames.filter((game) => game.price?.TR?.discount_percent > 0 || game.price?.AZ?.discount_percent > 0)
     }
 
