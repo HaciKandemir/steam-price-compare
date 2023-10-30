@@ -47,7 +47,7 @@ const queryParams = ref({
   page: 1,
   perPage: 10,
   sortColumn: 'id',
-  sortDirection: 'desc' as 'desc' | 'asc',
+  sortDirection: 'asc' as 'desc' | 'asc',
   tlMin: undefined as number | undefined,
   tlMax: undefined as number | undefined,
   name: undefined as string | undefined,
@@ -79,6 +79,10 @@ const updateSort = (data : {column: string, direction: 'asc'|'desc' }) => {
   queryParams.value.sortDirection = data.direction
 }
 
+const resetPage = () => {
+  queryParams.value.page = 1
+}
+
 // eg: 45875 => 458,75
 const formatCurrency = (value) => {
   if (typeof value === 'number') {
@@ -108,15 +112,15 @@ watch(
     <div class="flex flex-col max-w-[1280px] mx-auto gap-4">
       <div class="flex items-center justify-between gap-3  py-3">
         <UFormGroup label="Game Name">
-          <UInput placeholder="name" icon="i-heroicons-magnifying-glass-20-solid" v-model="queryParams.name" />
+          <UInput placeholder="name" icon="i-heroicons-magnifying-glass-20-solid" v-model="queryParams.name" @input="resetPage"/>
         </UFormGroup>
 
         <div class="flex gap-3 text-center items-center">
           <UFormGroup label="TL" >
             <div class="flex gap-3">
-              <UInput placeholder="min price" icon="i-heroicons-currency-yen" type="number" v-model="queryParams.tlMin" step=".01"/>
+              <UInput placeholder="min price" icon="i-heroicons-currency-yen" type="number" v-model="queryParams.tlMin" step=".01" @input="resetPage"/>
               -
-              <UInput placeholder="max price" icon="i-heroicons-currency-yen" type="number" v-model="queryParams.tlMax"/>
+              <UInput placeholder="max price" icon="i-heroicons-currency-yen" type="number" v-model="queryParams.tlMax" @input="resetPage"/>
             </div>
           </UFormGroup>
           <UFormGroup label="CIS - U.S. Dollar" v-show="false">
