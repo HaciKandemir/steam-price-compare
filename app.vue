@@ -91,7 +91,7 @@ const formatCurrency = (value) => {
   return value;
 };
 
-const fetchSlow = _debounce(() => fetchGame(), 500)
+const fetchSlow = _debounce(() => fetchGame(), 1000)
 
 watch(
   () => queryParams.value,

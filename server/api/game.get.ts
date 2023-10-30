@@ -27,8 +27,9 @@ export default defineEventHandler(async(event) => {
     }
 
     if (query.name && typeof query.name == 'string') {
-        const nameRegex = new RegExp(query.name.replace(/İ/g, 'i').replace(/i/g, 'ı'),'ig'); 
-        sortedGames = sortedGames.filter((game) => game.name.search(nameRegex) > 0)
+        const nameRegex = new RegExp(query.name.replace(/İ/g, 'i'),'ig'); 
+        console.log('nameRegex: ', nameRegex)
+        sortedGames = sortedGames.filter((game) => game.name.search(nameRegex) > -1)
     }
 
     if (orderBy) {
@@ -63,5 +64,5 @@ export default defineEventHandler(async(event) => {
     const endIndex = startIndex + pageSize;
     const gamesForPage = Object.values(sortedGames).slice(startIndex, endIndex);
 
-    return { data: gamesForPage, totalGames: Object.keys(sortedGames).length };
+    return { data: gamesForPage, totalGames: Object.keys(sortedGames).length, name: query.name };
 })
