@@ -145,7 +145,9 @@ watch(
 
         <template #price.TR.final-data="{ row }">
           <span class="flex flex-col">
-            <small v-if="row.price.TR.discount_percent > 0" class="opacity-50">{{ row.price.TR.initial_formatted }}</small>
+            <UTooltip v-if="row.price.TR.discount_percent > 0" text="İndirimsiz Fiyat" :popper="{ placement: 'top' }">
+              <small class="opacity-50">{{ row.price.TR.initial_formatted }}</small>
+            </UTooltip>
             <span>{{ row.price.TR.final_formatted }}</span>
           </span>
         </template>
@@ -159,7 +161,9 @@ watch(
 
         <template #price.AZ.final-data="{ row }">
           <div class="flex flex-col">
-            <small v-if="row.price.AZ.discount_percent > 0" class="opacity-50">{{ row.price.AZ.initial_formatted }} - {{ formatCurrency(row.price.AZ.initial*28.2) }}</small>
+            <UTooltip v-if="row.price.AZ.discount_percent > 0" text="İndirimsiz Fiyat" :popper="{ placement: 'top' }">
+              <small class="opacity-50">{{ row.price.AZ.initial_formatted }} - {{ formatCurrency(row.price.AZ.initial*28.2) }}</small>
+            </UTooltip>
             <span>{{ row.price.AZ.final_formatted }}</span>
             <span>{{ formatCurrency(row.price.AZ.final*28.2) }}</span>
           </div>
