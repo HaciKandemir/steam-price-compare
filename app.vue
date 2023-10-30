@@ -185,7 +185,7 @@ watch(
         </template>
       </UTable>
 
-      <div class="flex justify-between">
+      <div class="flex justify-between items-center gap-y-4 flex-col md:flex-row ">
         <div class="flex items-center gap-1.5">
           <span class="text-sm leading-5">Rows per page:</span>
           <USelect
@@ -198,7 +198,7 @@ watch(
         <UPagination v-model="queryParams.page" :page-count="queryParams.perPage" :total="totalGames" :max="15" />
       </div>
 
-      <div class="flex flex-col text-zinc-400">
+      <div class="flex flex-col text-zinc-400 items-center md:items-start">
         <small> Oyunların fiyatları 28/10/2023 tarihindeki verileri baz almaktadır.</small>
         <small> Dolar kuru 28,2tl olarak baz alınmıştır.</small>
       </div>
