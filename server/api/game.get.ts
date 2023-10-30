@@ -28,7 +28,6 @@ export default defineEventHandler(async(event) => {
 
     if (query.name && typeof query.name == 'string') {
         const nameRegex = new RegExp(query.name.replace(/İ/g, 'i'),'ig'); 
-        console.log('nameRegex: ', nameRegex)
         sortedGames = sortedGames.filter((game) => game.name.search(nameRegex) > -1)
     }
 
