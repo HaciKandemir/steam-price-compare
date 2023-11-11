@@ -72,8 +72,8 @@ const fetchGame = async() => {
 }
 
 onBeforeMount(async()=> {
-  await useFetch('/api/calculate');
-  //await fetchGame()
+  //await useFetch('/api/calculate');
+  await fetchGame()
 })
 
 const updateSort = (data : {column: string, direction: 'asc'|'desc' }) => {

@@ -8,11 +8,11 @@ export default defineEventHandler(async(event) => {
     const orderBy = query.sortColumn;
     const orderDirection = query.sortDirection;
 
-    //const filePath = path.join("/tmp", "game_list_v2.json");
+    //const filePath = path.join(process.cwd(), "/public/game_list_v2_11_11.json");
     //const fileData = fs.readFileSync(filePath, 'utf-8');
     //const gameList = JSON.parse(fileData);
 
-    const gameList = await $fetch('https://steam.haci.dev/game_list_v2.json')
+    const gameList = await $fetch('https://steam.haci.dev/game_list_v2_11_11.json')
 
     let sortedGames = Object.values(gameList);
 
