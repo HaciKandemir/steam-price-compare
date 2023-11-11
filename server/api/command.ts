@@ -2,11 +2,12 @@ import fs from 'fs'
 import path from 'path';
 
 export default defineEventHandler(async (event) => {
-  const filePath = path.resolve(process.cwd(), 'game_list.json'); // Dosya yolu
+  const filePath = path.resolve(process.cwd(), 'game_list_11_11.json'); // Dosya yolu
+  const falseFilePath = path.resolve(process.cwd(), 'false_game_list_11_11.json'); // Dosya yolu
   const appListResponse = await $fetch('https://api.steampowered.com/ISteamApps/GetAppList/v0001/')
   const appList = appListResponse?.applist?.apps?.app
-  const falseAppList = []
-  const chunkSize = 300;
+  let falseAppList = []
+  const chunkSize = 250;
   let gameList = {};
 
   console.log('appList', appList.length)
@@ -15,9 +16,10 @@ export default defineEventHandler(async (event) => {
     if (fs.existsSync(filePath)) {
       const fileData = fs.readFileSync(filePath, 'utf-8');
       gameList = JSON.parse(fileData);
+      falseAppList = JSON.parse(fs.readFileSync(falseFilePath, 'utf-8'))
 
       // Eğer veriler varsa, en son kaydedilen oyunun appid'sini al
-      const lastAppId = Object.keys(gameList).map(key => key.split('-')[1]).pop()
+      const lastAppId = Object.keys(gameList)?.map(key => key.split('-')[1])?.pop()
       if (lastAppId > 0) {
         const lastAppIndex = appList.findIndex(game => game.appid == lastAppId);
         console.log('lastAppId: ', lastAppId, 'lastAppIndex: ', lastAppIndex)
@@ -40,7 +42,10 @@ export default defineEventHandler(async (event) => {
         console.log('tr error: ', error);
         throw error;
       })
-      const azPricingResponse = await $fetch(`https://store.steampowered.com/api/appdetails?appids=${appIds}&cc=AZ&filters=price_overview`).catch((error) => console.log('az error: ', error))
+      const azPricingResponse = await $fetch(`https://store.steampowered.com/api/appdetails?appids=${appIds}&cc=AZ&filters=price_overview`).catch((error) => {
+        console.log('az error: ', error)
+        throw error;
+      })
 
       const chunkedGameList = {};
 
@@ -72,9 +77,11 @@ export default defineEventHandler(async (event) => {
 
       // Verileri bir dosyaya yazın
       const dataToWrite = JSON.stringify(gameList, null, 2);
+      const falseDataToWrite = JSON.stringify(falseAppList, null, 2);
 
       try {
         fs.writeFileSync(filePath, dataToWrite, 'utf-8');
+        fs.writeFileSync(falseFilePath, falseDataToWrite, 'utf-8');
         console.log('Veriler dosyaya yazıldı: game_list.json');
       } catch (error) {
         console.error('Dosyaya yazma hatası:', error);

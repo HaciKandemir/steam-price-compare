@@ -4,7 +4,6 @@ useHead({
   title: 'Steam Price Compare - V3'
 })
 
-//const gameList = await useFetch('/api/calculate');
 
 const columns = [
   {
@@ -43,6 +42,7 @@ const columns = [
 const games = ref([])
 const totalGames = ref(0)
 const loading = ref(false)
+const usdToTry = 29
 const queryParams = ref({
   page: 1,
   perPage: 10,
@@ -72,7 +72,8 @@ const fetchGame = async() => {
 }
 
 onBeforeMount(async()=> {
-  await fetchGame()
+  await useFetch('/api/calculate');
+  //await fetchGame()
 })
 
 const updateSort = (data : {column: string, direction: 'asc'|'desc' }) => {
@@ -168,7 +169,7 @@ watch(
               <small class="opacity-50">{{ row.price.AZ.initial_formatted }} - {{ formatCurrency(row.price.AZ.initial*28.2) }}</small>
             </UTooltip>
             <span>{{ row.price.AZ.final_formatted }}</span>
-            <span>{{ formatCurrency(row.price.AZ.final*28.2) }}</span>
+            <span>{{ formatCurrency(row.price.AZ.final * usdToTry) }}</span>
           </div>
         </template>
 
@@ -195,12 +196,12 @@ watch(
           />
         </div>
 
-        <UPagination v-model="queryParams.page" :page-count="queryParams.perPage" :total="totalGames" :max="15" />
+        <UPagination v-model="queryParams.page" :page-count="queryParams.perPage" :total="totalGames" :max="15" class="flex-wrap justify-center" />
       </div>
 
       <div class="flex flex-col text-zinc-400 items-center md:items-start">
-        <small> Oyunların fiyatları 28/10/2023 tarihindeki verileri baz almaktadır.</small>
-        <small> Dolar kuru 28,2tl olarak baz alınmıştır.</small>
+        <small> Oyunların fiyatları 11/11/2023 tarihindeki verileri baz almaktadır.</small>
+        <small> Dolar kuru {{usdToTry.toFixed(2).replace('.',',')}}TL olarak baz alınmıştır.</small>
       </div>
     </div>
   </div>
